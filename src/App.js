@@ -1,24 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+//import AboutPage from "./pages/AboutPage";
+import Header from "./Components/Header";
+import Products from "./Components/Products";
+import ViewProduct from "./Components/ViewProduct";
+const LazyAbout = React.lazy(() => import("./pages/AboutPage"));
 function App() {
+  const [products, setProducts] = React.useState([]);
+  useEffect(() => {
+    const getProducts = async () => {
+      const productsFromServer = await fetchProducts();
+      setProducts(productsFromServer);
+    };
+    getProducts();
+  }, []);
+
+
+ 
+  const fetchProducts = async () => {
+    const res = await fetch("http://localhost:5000/products");
+    const data = await res.json();
+    return data;
+  };
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Header></Header>
+      
+
+        <Routes>
+          <Route path="/" element={<HomePage />}>
+            <Route
+              path=""
+              element={
+                <Products
+                  products={products}
+                  setProducts={setProducts}
+                ></Products>
+              }
+            ></Route>
+            <Route
+              path="products/:id"
+              element={<ViewProduct></ViewProduct>}
+            ></Route>
+          </Route>
+          <Route
+            path="/about"
+            element={
+              <React.Suspense fallback={<div className="page">Loading...</div>}>
+                <LazyAbout></LazyAbout>
+              </React.Suspense>
+            }
+          ></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
