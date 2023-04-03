@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 
 * {
@@ -14,9 +17,6 @@ body {
   color: white;
   padding: 12px;
 }
-/* .navbar {
-  grid-column: 3;
-} */
 .navbar ul {
   display: flex;
   justify-content: space-around;
@@ -58,6 +58,7 @@ body {
   justify-content: space-between;
   text-align: center;
   margin-bottom: 20px;
+  align-items: center;
 }
 .productInfo {
   margin: 30px;
@@ -113,12 +114,11 @@ body {
   border: 1px solid steelblue;
   padding: 30px;
   border-radius: 5px;
-  height: 900px;
 }
 .scroll {
   max-width: 900px;
   max-height: 400px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: auto;
 }
 /* .table-content {

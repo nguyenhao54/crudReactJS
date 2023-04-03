@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Product from "./Product";
 import DetailProduct from "../Components/DetailProduct";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import SearchInput from "./SearchInput";
 function Products({ products, setProducts }) {
   console.log(products);
   console.log("products render");
   let navigate = useNavigate();
-  const [showDetail, setShowDetail] = React.useState(false);
+  const [showDetail, setShowDetail] = React.useState( false );
+  const searchInput = React.createRef();
+  const [isEmpty, setIsEmpty] = React.useState( true );
   const [productDetail, setProductDetail] = React.useState(products[1]);
-  const [isDetail, setIsDetail] = React.useState(true);
+  const [isDetail, setIsDetail] = React.useState( true );
+  const [filteredList,setFilteredList] = React.useState(products)
   const editProduct = async (id) => {
     setShowDetail(true);
     setIsDetail(true);
@@ -53,7 +57,20 @@ function Products({ products, setProducts }) {
     setProducts([...products, data]);
     setShowDetail(!showDetail);
   };
-
+  useEffect( () =>
+  {
+    if (isEmpty)
+      setFilteredList(products);
+  }, [isEmpty])
+  const onSearch = ( e ) =>
+  {
+    e.preventDefault();
+    if ( searchInput.current.value )
+      console.log(searchInput.current.value);
+      setFilteredList(
+        products.filter((p) => p.title.toLowerCase().includes(searchInput.current.value.toLowerCase()))
+      );
+  };
   return (
     <>
       {showDetail ? (
@@ -69,6 +86,7 @@ function Products({ products, setProducts }) {
 
       <div className="displayFlex">
         <h3 className=" heading-third"> Product Management</h3>
+        <SearchInput ref={searchInput} onSearch={onSearch} setIsEmpty={setIsEmpty}></SearchInput>
         <Button text="Add Product" onClick={onAdd}></Button>
       </div>
       <div className="scroll">
@@ -84,7 +102,7 @@ function Products({ products, setProducts }) {
             </tr>
           </thead>
           <tbody className="scroll">
-            {products.map((product) => (
+            {filteredList.map((product) => (
               <Product
                 key={product.id}
                 product={product}
