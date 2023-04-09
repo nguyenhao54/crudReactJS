@@ -2,28 +2,28 @@ import React from "react";
 import Button from "./Button";
 function Product({ product, onEdit, onDelete, onView }) {
   return (
-    <tr
+    <div
       onDoubleClick={() => {
         onView(product.id);
       }}
+      className="grid grid-cols-12 gap-3 border-x-2 justify-center items-center px-2 py-1"
     >
-      <td
-        className="td cursor-pointer font-semibold"
+      <div
+        className="cursor-pointer font-semibold col-span-3"
         onClick={() => {
           onView(product.id);
         }}
       >
         {product.title}
-      </td>
-      <td className="td">{product.price + "$"}</td>
-      <td className="td">{product.stock}</td>
-      <td className="td">{product.brand}</td>
-      <td className="td">{product.category}</td>
-      <td className="td">
+      </div>
+      <div className="col-span-2">{product.price + "$"}</div>
+      <div className="col-span-1">{product.stock}</div>
+      <div className="col-span-2">{product.brand}</div>
+      <div className="col-span-2">{product.category}</div>
+      <div className="col-span-2">
         <Button
           icon="edit"
           onClick={() => {
-            //console.log("click");
             onEdit(product.id);
           }}
         ></Button>
@@ -34,8 +34,8 @@ function Product({ product, onEdit, onDelete, onView }) {
             onDelete(product.id);
           }}
         ></Button>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 }
 

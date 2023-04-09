@@ -3,7 +3,6 @@ import Button from "./Button";
 
 function DetailProduct({ product, onShowDetail, onSave, isDetail, onAdd }) {
   const [detail, setDetail] = React.useState(product);
-  // console.log(product);
   const {
     title,
     description,
@@ -16,17 +15,15 @@ function DetailProduct({ product, onShowDetail, onSave, isDetail, onAdd }) {
     thumbnail,
     image,
   } = detail;
-  // console.log(detail);
+
   function handleInputChange(e) {
     const target = e.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const inputName = target.name;
-    //  console.log(inputName);
     setDetail((detail) => ({ ...detail, [inputName]: value }));
   }
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(detail);
     if (isDetail) onSave(detail);
     else onAdd(detail);
   }

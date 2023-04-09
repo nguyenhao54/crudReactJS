@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useParams } from "react-router-dom";
+import { fetchProduct } from "../api";
 
 import {
   faBoxesStacked,
@@ -15,16 +16,7 @@ function ProductInfo({ id }) {
     error: null,
     status: id ? "pending" : "idle",
   });
-  const fetchProduct = async (id) => {
-    const res = await fetch(`http://localhost:5000/products/${id}`);
-    const data = await res.json();
-    // if (data === {}) {
-    //   const error = { message: `There is no Product with id ${id}` };
-    //   return Promise.reject(error);
-    // }
-    // console.log(data);
-    return data;
-  };
+
   const { status, product, error } = state;
   useEffect(() => {
     if (!id) return;
@@ -36,24 +28,6 @@ function ProductInfo({ id }) {
       .catch((error) => {
         setState({ status: "rejected", error });
       });
-    // setState({
-    //   product: {
-    //     id: 6,
-    //     title: "MacBook Pro",
-    //     description:
-    //       "MacBook Pro 2021 with mini-LED display may launch between September, November",
-    //     price: 1749,
-    //     discountPercentage: 11.02,
-    //     rating: 4.57,
-    //     stock: 83,
-    //     brand: "APPle",
-    //     category: "laptops",
-    //     thumbnail: "https://dummyjson.com/image/i/products/6/thumbnail.png",
-    //     image: 
-    //       "https://dummyjson.com/image/i/products/6/2.jpg"
-    //   },
-    //   status: "resolved",
-    // });
   }, [error, id]);
   if (status === "idle") {
     return <div>No id provided</div>;
@@ -69,7 +43,7 @@ function ProductInfo({ id }) {
     return (
       <div>
         <img
-          className="h-60 flex justify-around"
+          className="h-60 flex justify-around p-4"
           src={`${product.image}`}
           alt="Product illustration"
         />
@@ -106,7 +80,6 @@ function ErrorFallback({ error }) {
   );
 }
 function ViewProduct() {
-  // console.log(product);
   let { id } = useParams();
   return (
     <>

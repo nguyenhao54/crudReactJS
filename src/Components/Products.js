@@ -5,39 +5,29 @@ import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import SearchInput from "./SearchInput";
 import Loading from "./Loading";
-function Products({ products, setProducts,loading}) {
-  console.log(products);
-  console.log( "products render" );
-  console.log(loading)
+import { add, deleteP, updateP } from "../api";
+function Products({ products, setProducts, loading }) {
   let navigate = useNavigate();
-  const [showDetail, setShowDetail] = React.useState( false );
+  const [showDetail, setShowDetail] = React.useState(false);
   const searchInput = React.createRef();
-  const [isEmpty, setIsEmpty] = React.useState( true );
+  const [isEmpty, setIsEmpty] = React.useState(true);
   const [productDetail, setProductDetail] = React.useState(products[1]);
-  const [isDetail, setIsDetail] = React.useState( true );
-  const [filteredList,setFilteredList] = React.useState(products)
+  const [isDetail, setIsDetail] = React.useState(true);
+  const [filteredList, setFilteredList] = React.useState(products);
   const editProduct = async (id) => {
     setShowDetail(true);
     setIsDetail(true);
     setProductDetail(products.find((product) => product.id === id));
-
   };
   const deleteProduct = async (id) => {
-    await fetch(`http://localhost:5000/products/${id}`, {
-      method: "DELETE",
-    });
+    const res = await deleteP(id);
     setProducts(products.filter((product) => product.id !== id));
   };
   const viewProduct = async (id) => {
     navigate(`/products/${id}`);
   };
   const saveProduct = async (product) => {
-    const res = await fetch(`http://localhost:5000/products/${product.id}`, {
-      method: "PUT" /* or PATCH */,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    });
-    const data = await res.json();
+    const data = await updateP( product );
     setProducts(products.map((p) => (p.id === product.id ? data : p)));
     setShowDetail(!showDetail);
   };
@@ -47,28 +37,21 @@ function Products({ products, setProducts,loading}) {
     setIsDetail(false);
   }
   const addProduct = async (product) => {
-    const res = await fetch("http://localhost:5000/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    });
-    const data = await res.json();
-    setProducts([...products, data]);
+    const res = await add(product);
+    setProducts([...products, res]);
     setShowDetail(!showDetail);
   };
-  useEffect( () =>
-  {
-    if (isEmpty)
-      setFilteredList(products);
-  }, [isEmpty])
-  const onSearch = ( e ) =>
-  {
+  useEffect(() => {
+    if (isEmpty) setFilteredList(products);
+  }, [isEmpty, products]);
+  const onSearch = (e) => {
     e.preventDefault();
-    if ( searchInput.current.value )
-      console.log(searchInput.current.value);
-      setFilteredList(
-        products.filter((p) => p.title.toLowerCase().includes(searchInput.current.value.toLowerCase()))
-      );
+    if (searchInput.current.value);
+    setFilteredList(
+      products.filter((p) =>
+        p.title.toLowerCase().includes(searchInput.current.value.toLowerCase())
+      )
+    );
   };
   return (
     <>
@@ -91,19 +74,19 @@ function Products({ products, setProducts,loading}) {
         ></SearchInput>
         <Button text="Add Product" onClick={onAdd}></Button>
       </div>
-      <div className="scroll">
-        <table className="table relative min-h-[300px] min-w-[500px] md:w-screen">
-          <thead className="absolute bg-neutral-300 max-w-[900px] left-0 top-0 justify-items-center">
-            <tr>
-              <th className="td">Title</th>
-              <th className="td">Price</th>
-              <th className="td">Stock</th>
-              <th className="td">Brand</th>
-              <th className="td">Category</th>
-              <th className="td">Action</th>
-            </tr>
-          </thead>
-          <tbody className="pt-12 scroll">
+      <div className="">
+        <div className="relative w-[900px] m-auto">
+          <div className="absolute bg-neutral-300  left-0 top-0 justify-center items-center">
+            <div className="grid grid-cols-12 gap-3 h-12 justify-center items-center border-2 px-2 py-1 w-[900px]">
+              <div className="col-span-3">Title</div>
+              <div className="col-span-2">Price</div>
+              <div className="col-span-1">Stock</div>
+              <div className="col-span-2">Brand</div>
+              <div className="col-span-2">Category</div>
+              <div className="col-span-1">Action</div>
+            </div>
+          </div>
+          <div className="pt-12 max-w-[900px] max-h-[400px] overflow-y-scroll">
             {loading ? (
               <div className="flex justify-center items-center h-[300px]">
                 <Loading></Loading>
@@ -127,8 +110,8 @@ function Products({ products, setProducts,loading}) {
                 )}
               </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </>
   );

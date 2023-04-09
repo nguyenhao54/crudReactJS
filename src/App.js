@@ -7,7 +7,9 @@ import Header from "./Components/Header";
 import Products from "./Components/Products";
 import ViewProduct from "./Components/ViewProduct";
 import Loading from "./Components/Loading";
-const LazyAbout = React.lazy(() => import("./pages/AboutPage"));
+import { fetchProducts } from "./api";
+const LazyAbout = React.lazy( () => import( "./pages/AboutPage" ) );
+
 function App()
 {
   const [loading, setLoading] = React.useState(true);
@@ -20,14 +22,6 @@ function App()
        setProducts(res);
     }).finally(()=>{  setLoading( false )});
   }, [] );
-  
-  const fetchProducts = async () => {
-    const res = await fetch("http://localhost:5000/products");
-    
-    const data = await res.json();
-    return data;
-  };
-
 
   return (
     <Router>

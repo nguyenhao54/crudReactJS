@@ -126,12 +126,6 @@ body {
   max-height: 600px;
   overflow: scroll;
 } */
-.td {
-  width: 200px;
-  height: 50px;
-  text-align: center;
-  overflow-wrap: break-word;
-}
 .btn {
   display: inline-block;
   background: #000;
