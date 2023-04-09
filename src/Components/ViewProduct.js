@@ -11,7 +11,7 @@ import Loading from "./Loading";
 
 function ProductInfo({ id }) {
   const [state, setState] = React.useState({
-    product: { image },
+    product: { image: "" },
     error: null,
     status: id ? "pending" : "idle",
   });
