@@ -21,7 +21,7 @@ const Button = ({ color, text, icon, onClick }) => {
 };
 
 Button.defaultProps = {
-  color: "green",
+  color: "#4f87e3",
 };
 Button.propTypes = {
   text: PropTypes.string,

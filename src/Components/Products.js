@@ -4,9 +4,11 @@ import DetailProduct from "../Components/DetailProduct";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import SearchInput from "./SearchInput";
-function Products({ products, setProducts }) {
+import Loading from "./Loading";
+function Products({ products, setProducts,loading}) {
   console.log(products);
-  console.log("products render");
+  console.log( "products render" );
+  console.log(loading)
   let navigate = useNavigate();
   const [showDetail, setShowDetail] = React.useState( false );
   const searchInput = React.createRef();
@@ -18,17 +20,15 @@ function Products({ products, setProducts }) {
     setShowDetail(true);
     setIsDetail(true);
     setProductDetail(products.find((product) => product.id === id));
-    // console.log(id);
+
   };
   const deleteProduct = async (id) => {
-    // console.log(id);
     await fetch(`http://localhost:5000/products/${id}`, {
       method: "DELETE",
     });
     setProducts(products.filter((product) => product.id !== id));
   };
   const viewProduct = async (id) => {
-    // console.log(id);
     navigate(`/products/${id}`);
   };
   const saveProduct = async (product) => {
@@ -53,7 +53,6 @@ function Products({ products, setProducts }) {
       body: JSON.stringify(product),
     });
     const data = await res.json();
-    console.log(data);
     setProducts([...products, data]);
     setShowDetail(!showDetail);
   };
@@ -83,15 +82,18 @@ function Products({ products, setProducts }) {
           onAdd={addProduct}
         ></DetailProduct>
       ) : null}
-
-      <div className="displayFlex">
-        <h3 className=" heading-third"> Product Management</h3>
-        <SearchInput ref={searchInput} onSearch={onSearch} setIsEmpty={setIsEmpty}></SearchInput>
+      <h3 className=" heading-third"> Product Management</h3>
+      <div className="flex items-center gap-10 justify-center">
+        <SearchInput
+          ref={searchInput}
+          onSearch={onSearch}
+          setIsEmpty={setIsEmpty}
+        ></SearchInput>
         <Button text="Add Product" onClick={onAdd}></Button>
       </div>
       <div className="scroll">
-        <table className="table">
-          <thead>
+        <table className="table relative min-h-[300px] min-w-[500px] md:w-screen">
+          <thead className="absolute bg-neutral-300 max-w-[900px] left-0 top-0 justify-items-center">
             <tr>
               <th className="td">Title</th>
               <th className="td">Price</th>
@@ -101,16 +103,30 @@ function Products({ products, setProducts }) {
               <th className="td">Action</th>
             </tr>
           </thead>
-          <tbody className="scroll">
-            {filteredList.map((product) => (
-              <Product
-                key={product.id}
-                product={product}
-                onEdit={editProduct}
-                onDelete={deleteProduct}
-                onView={viewProduct}
-              ></Product>
-            ))}
+          <tbody className="pt-12 scroll">
+            {loading ? (
+              <div className="flex justify-center items-center h-[300px]">
+                <Loading></Loading>
+              </div>
+            ) : (
+              <div>
+                {filteredList.length > 0 ? (
+                  filteredList.map((product) => (
+                    <Product
+                      key={product.id}
+                      product={product}
+                      onEdit={editProduct}
+                      onDelete={deleteProduct}
+                      onView={viewProduct}
+                    ></Product>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center h-[200px]">
+                    No Items available
+                  </div>
+                )}
+              </div>
+            )}
           </tbody>
         </table>
       </div>

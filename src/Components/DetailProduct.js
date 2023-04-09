@@ -14,7 +14,7 @@ function DetailProduct({ product, onShowDetail, onSave, isDetail, onAdd }) {
     brand,
     category,
     thumbnail,
-    images,
+    image,
   } = detail;
   // console.log(detail);
   function handleInputChange(e) {
@@ -126,35 +126,14 @@ function DetailProduct({ product, onShowDetail, onSave, isDetail, onAdd }) {
             ></input>
           </div>
           <div className="form-control">
-            <label> Images</label>
-
-            {isDetail ? (
-              images.map((image, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  name="image"
-                  placeholder="Add images"
-                  value={image}
-                  onChange={(e) => {
-                    images[index] = e.target.value;
-                    setDetail((detail) => ({
-                      ...detail,
-                      images: images,
-                    }));
-                    // console.log("imagejsjdfaskj" + images[index]);
-                  }}
-                ></input>
-              ))
-            ) : (
+            <label> Image</label>
               <input
                 type="text"
                 name="image"
                 placeholder="Add images"
-                value={images}
+                value={image}
                 onChange={(e) => handleInputChange(e)}
               ></input>
-            )}
           </div>
         </div>
         <div className="form-footer">

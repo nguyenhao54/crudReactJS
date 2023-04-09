@@ -4,12 +4,18 @@ function Product({ product, onEdit, onDelete, onView }) {
   return (
     <tr
       onDoubleClick={() => {
-        console.log(product.id);
         onView(product.id);
       }}
     >
-      <td className="td">{product.title}</td>
-      <td className="td">{product.price}</td>
+      <td
+        className="td cursor-pointer font-semibold"
+        onClick={() => {
+          onView(product.id);
+        }}
+      >
+        {product.title}
+      </td>
+      <td className="td">{product.price + "$"}</td>
       <td className="td">{product.stock}</td>
       <td className="td">{product.brand}</td>
       <td className="td">{product.category}</td>

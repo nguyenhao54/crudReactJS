@@ -6,19 +6,21 @@ import HomePage from "./pages/HomePage";
 import Header from "./Components/Header";
 import Products from "./Components/Products";
 import ViewProduct from "./Components/ViewProduct";
+import Loading from "./Components/Loading";
 const LazyAbout = React.lazy(() => import("./pages/AboutPage"));
-function App() {
+function App()
+{
+  const [loading, setLoading] = React.useState(true);
   const [products, setProducts] = React.useState([]);
-  useEffect(() => {
-    const getProducts = async () => {
-      const productsFromServer = await fetchProducts();
-      setProducts(productsFromServer);
-    };
-    getProducts();
-  }, []);
-
-
- 
+  useEffect( () =>
+  {
+    setLoading( true );
+    fetchProducts().then( ( res ) =>
+    {
+       setProducts(res);
+    }).finally(()=>{  setLoading( false )});
+  }, [] );
+  
   const fetchProducts = async () => {
     const res = await fetch("http://localhost:5000/products");
     
@@ -31,8 +33,6 @@ function App() {
     <Router>
       <div>
         <Header></Header>
-      
-
         <Routes>
           <Route path="/" element={<HomePage />}>
             <Route
@@ -41,6 +41,7 @@ function App() {
                 <Products
                   products={products}
                   setProducts={setProducts}
+                  loading={loading}
                 ></Products>
               }
             ></Route>
@@ -52,7 +53,13 @@ function App() {
           <Route
             path="/about"
             element={
-              <React.Suspense fallback={<div className="page">Loading...</div>}>
+              <React.Suspense
+                fallback={
+                  <div className="flex justify-center items-center h-[500px]">
+                    <Loading></Loading>
+                  </div>
+                }
+              >
                 <LazyAbout></LazyAbout>
               </React.Suspense>
             }

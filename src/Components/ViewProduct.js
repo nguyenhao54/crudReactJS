@@ -7,6 +7,7 @@ import {
   faBoxesStacked,
   faCircleDollarToSlot,
 } from "@fortawesome/free-solid-svg-icons";
+import Loading from "./Loading";
 
 function ProductInfo({ id }) {
   const [state, setState] = React.useState({
@@ -26,12 +27,6 @@ function ProductInfo({ id }) {
   };
   const { status, product, error } = state;
   useEffect(() => {
-    // const getProduct = async () => {
-    //   const productFromServer = await fetchProduct(id);
-    // //   if(!productFromServer) throw error;
-    //   setProduct(productFromServer);
-    // };
-    // getProduct();
     if (!id) return;
     setState({ status: "pending" });
     fetchProduct(id)
@@ -41,28 +36,50 @@ function ProductInfo({ id }) {
       .catch((error) => {
         setState({ status: "rejected", error });
       });
+    // setState({
+    //   product: {
+    //     id: 6,
+    //     title: "MacBook Pro",
+    //     description:
+    //       "MacBook Pro 2021 with mini-LED display may launch between September, November",
+    //     price: 1749,
+    //     discountPercentage: 11.02,
+    //     rating: 4.57,
+    //     stock: 83,
+    //     brand: "APPle",
+    //     category: "laptops",
+    //     thumbnail: "https://dummyjson.com/image/i/products/6/thumbnail.png",
+    //     image: 
+    //       "https://dummyjson.com/image/i/products/6/2.jpg"
+    //   },
+    //   status: "resolved",
+    // });
   }, [error, id]);
   if (status === "idle") {
     return <div>No id provided</div>;
   } else if (status === "pending") {
-    return <div>Pending</div>;
+    return (
+      <div className="flex justify-center items-center h-[500px]">
+        <Loading></Loading>
+      </div>
+    );
   } else if (status === "rejected") {
     throw error;
   } else if (status === "resolved") {
     return (
-      <div className="displayFlex">
+      <div>
         <img
-          className="displayImage"
-          src={`${product.images[1]}`}
+          className="h-60 flex justify-around"
+          src={`${product.image}`}
           alt="Product illustration"
         />
-        <div className="productInfo">
-          <h4>{product.title}</h4>
-          <p>Description: {product.description}</p>
+        <div>
+          <h4 className="text-xl font-semibold mb-2">{product.title}</h4>
+          <p className="mb-2">Description: {product.description}</p>
           <p>
             <FontAwesomeIcon
               icon={faCircleDollarToSlot}
-              color="green"
+              color="#4f87e3"
               style={{ marginRight: " 10px" }}
             ></FontAwesomeIcon>
             Price: {product.price}$
@@ -70,7 +87,7 @@ function ProductInfo({ id }) {
           <p>
             <FontAwesomeIcon
               icon={faBoxesStacked}
-              color="green"
+              color="#4f87e3"
               style={{ marginRight: "10px" }}
             ></FontAwesomeIcon>
             Stock: {product.stock}

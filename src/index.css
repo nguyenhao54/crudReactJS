@@ -1,7 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 
 * {
   box-sizing: border-box;
@@ -38,7 +38,7 @@ body {
   transform: translateY(-1px);
 }
 .heading-third {
-  color: green;
+  color: #4f87e3;
 }
 .page {
   max-width: 1300px;
@@ -108,12 +108,13 @@ body {
 }
 .table {
   max-width: 900px;
+  max-height: 400px;
   margin: auto;
   overflow: scroll;
-  min-height: 300px;
   border: 1px solid steelblue;
   padding: 30px;
   border-radius: 5px;
+  position: relative;
 }
 .scroll {
   max-width: 900px;
@@ -179,7 +180,7 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: green;
+  background: rgb(187, 187, 187);
   border-radius: 10px;
 }
 .displayImage {
